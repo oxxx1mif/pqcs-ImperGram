@@ -166,7 +166,7 @@
     <string name="SaveToDownloadCount_few">Сохранение %1$d файлов в загрузки</string>
     <string name="SaveToDownloadCount_many">Сохранение %1$d файлов в загрузки</string>
     <string name="SaveToDownloadCount_other">Сохранение %1$d файлов в загрузки</string>
-    <string name="AppLinkNotVerifiedMessage">Для Android 12 и более поздних версий вам необходимо вручную добавить ссылку к подтверждённым ссылкам, чтобы открывать ссылки t.me в Nekogram.</string>
+    <string name="AppLinkNotVerifiedMessage">Для Android 12 и более поздних версий вам необходимо вручную добавить ссылку к подтверждённым ссылкам, чтобы открывать ссылки t.me в Impergram.</string>
     <string name="AppLinkNotVerifiedTitle">Ссылки приложения не подтверждены</string>
     <string name="AutoTranslate">Автоперевод</string>
     <string name="AutoTranslateAbout">Автоматически переводить сообщения с иностранного языка.</string>

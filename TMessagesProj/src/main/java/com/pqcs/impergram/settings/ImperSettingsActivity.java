@@ -149,7 +149,7 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
         items.add(UItem.asButton(experimentRow, R.drawable.msg_fave, LocaleController.getString(R.string.NotificationsOther)).slug("experiment"));
         items.add(UItem.asShadow(null));
 
-        items.add(UItem.asButton(channelRow, R.drawable.msg_channel, LocaleController.getString(R.string.OfficialChannel), "@" + LocaleController.getString(R.string.OfficialChannelUsername)).slug("channel"));
+        items.add(UItem.asButton(channelRow, R.drawable.msg_channel, LocaleController.getString(R.string.OfficialChannel), "@" + LocaleController.getString(R.string.OffTgUsChannelImper)).slug("channel"));
         items.add(UItem.asButton(sourceCodeRow, R.drawable.msg_link, LocaleController.getString(R.string.ViewSourceCode), "GitHub").slug("sourceCode"));
         items.add(UItem.asShadow(null));
     }
@@ -166,7 +166,7 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
         if (id == experimentRow) {
             presentFragment(new NekoChatSettingsActivity());
         } else if (id == channelRow) {
-            getMessagesController().openByUserName(LocaleController.getString(R.string.OfficialChannelUsername), this, 1);
+            getMessagesController().openByUserName(LocaleController.getString(R.string.OffTgUsChannelImper), this, 1);
         } else if (id == sourceCodeRow) {
             Browser.openUrl(getParentActivity(), "https://github.com/oxxx1mif/pqcs-ImperGram");
         }
@@ -237,9 +237,9 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
         searchResultList.add(new ProfileActivity.SearchAdapter.SearchResult(
                 20000,
                 LocaleController.getString(R.string.OfficialChannel),
-                "@" + LocaleController.getString(R.string.OfficialChannelUsername),
+                "@" + LocaleController.getString(R.string.OffTgUsChannelImper),
                 R.drawable.msg2_help,
-                () -> getMessagesController().openByUserName(LocaleController.getString(R.string.OfficialChannelUsername), this, 1)
+                () -> getMessagesController().openByUserName(LocaleController.getString(R.string.OffTgUsChannelImper), this, 1)
         ));
 
         searchResultList.add(new ProfileActivity.SearchAdapter.SearchResult(

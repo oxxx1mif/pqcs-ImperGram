@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="AppNameNeko" translatable="false">ImperGram</string>
-    <string name="Nekogram" translatable="false">ImperGram</string>
+    <string name="Nekogram" translatable="false">Nekogram</string>
     <string name="NekogramBeta" translatable="false">ImperGram Beta</string>
     <string name="NekoSettings">Neko Settings</string>
     <string name="PreferIPv6">Prefer connecting through IPv6</string>
@@ -71,7 +71,7 @@
     <string name="Translation">Translate Nekogram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="ResetStickerSize">Reset sticker size</string>
-    <string name="OfficialChannelUsername">guamain</string>
+    <string name="OfficialChannelUsername">nekoupdates</string>
     <string name="RestartAppToTakeEffect">Restart the app to take effect.</string>
     <string name="DisableAppBarShadow">Disable title bar shadow</string>
     <string name="MediaPreview">Media preview in dialog list</string>
@@ -334,6 +334,8 @@
     <string name="JsonCopyValue">Copy Value</string>
     <string name="LocalCustomEmoji">Local custom emoji</string>
     <string name="MiniSenderAvatar">Sender mini photo</string>
+
+    <string name="OffTgUsChannelImper" translatable="false">guamain</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Accessibility settings</string>
