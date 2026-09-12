@@ -144,7 +144,7 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
 
         items.add(UItem.asCustomShadow(topView, 200 - 12));
 
-        items.add(UItem.asButton(experimentRow, R.drawable.msg_fave, LocaleController.getString(R.string.NotificationsOther)).slug("experiment"));
+        items.add(UItem.asButton(experimentRow, R.drawable.msg_fave, LocaleController.getString(R.string.ExperimentalSettings)).slug("experiment"));
         items.add(UItem.asShadow(null));
 
         items.add(UItem.asButton(channelRow, R.drawable.msg_channel, LocaleController.getString(R.string.OfficialChannel), "@" + LocaleController.getString(R.string.OffTgUsChannelImper)).slug("channel"));
@@ -177,7 +177,7 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
 
     @Override
     protected String getKey() {
-        return "";
+        return "imper_settings";
     }
 
     @Override

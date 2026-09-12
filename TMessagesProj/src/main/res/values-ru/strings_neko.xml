@@ -322,7 +322,9 @@
     <string name="TabsPositionBottom">Снизу</string>
     <string name="StrokeOnViews">Эффекты бликов</string>
 
-    <string name="CustomNoiseSuppressor">Кастомный шумодав</string>
+    <string name="CustomNoiseSuppressor">Шумоподавление</string>
+    <string name="ExperimentalSettings">Экспериментальные</string>
+    <string name="NoiseCancellationSettings">Настройки шумоподавления</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Настройки доступности</string>

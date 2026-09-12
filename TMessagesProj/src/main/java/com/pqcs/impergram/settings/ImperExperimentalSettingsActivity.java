@@ -24,6 +24,7 @@ import com.pqcs.impergram.ImperConfig;
 public class ImperExperimentalSettingsActivity extends BaseNekoSettingsActivity {
 
     private final int customNoiseSuppressorRow = rowId++;
+    private final int settingsCustomNoiseSuppressorRow = rowId++;
 
     @Override
     protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
@@ -32,6 +33,10 @@ public class ImperExperimentalSettingsActivity extends BaseNekoSettingsActivity 
         items.add(UItem.asCheck(customNoiseSuppressorRow, LocaleController.getString(R.string.CustomNoiseSuppressor))
                 .slug("customNoiseSuppressor")
                 .setChecked(ImperConfig.customNoiseSuppressor));
+
+        if (ImperConfig.customNoiseSuppressor) {
+            items.add(UItem.asButton(settingsCustomNoiseSuppressorRow, R.drawable.input_mic, LocaleController.getString(R.string.NoiseCancellationSettings)).slug("noiseCancellationSettings"));
+        }
 
         items.add(UItem.asShadow(null));
     }
@@ -45,6 +50,8 @@ public class ImperExperimentalSettingsActivity extends BaseNekoSettingsActivity 
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ImperConfig.customNoiseSuppressor);
             }
+        } else if (id == settingsCustomNoiseSuppressorRow) {
+            presentFragment(new ImperNoiseSuppressorSettingsActivity());
         }
     }
 

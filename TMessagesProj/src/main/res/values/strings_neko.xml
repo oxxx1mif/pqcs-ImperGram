@@ -337,6 +337,8 @@
 
     <string name="OffTgUsChannelImper" translatable="false">guamain</string>
     <string name="CustomNoiseSuppressor">Custom Noise Suppressor</string>
+    <string name="ExperimentalSettings">Experimental</string>
+    <string name="NoiseCancellationSettings">Noise cancellation settings</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Accessibility settings</string>
