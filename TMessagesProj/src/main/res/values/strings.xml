@@ -7,6 +7,9 @@
     <string name="LanguageNameInEnglish">English</string>
     <string name="LanguageCode">en</string>
     <string name="ContinueOnThisLanguage">Continue in English</string>
+
+    <string name="ImperSettings">Impergram settings</string>
+
     <!--signin view-->
     <string name="YourPhone">Your Phone</string>
     <string name="StartText">Please confirm your country code and enter your phone number.</string>

@@ -150,7 +150,7 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
         items.add(UItem.asShadow(null));
 
         items.add(UItem.asButton(channelRow, R.drawable.msg_channel, LocaleController.getString(R.string.OfficialChannel), "@" + LocaleController.getString(R.string.OfficialChannelUsername)).slug("channel"));
-        items.add(UItem.asButton(sourceCodeRow, R.drawable.msg_link, LocaleController.getString(R.string.ViewSourceCode), "Codeberg").slug("sourceCode"));
+        items.add(UItem.asButton(sourceCodeRow, R.drawable.msg_link, LocaleController.getString(R.string.ViewSourceCode), "GitHub").slug("sourceCode"));
         items.add(UItem.asShadow(null));
     }
 
@@ -168,7 +168,7 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
         } else if (id == channelRow) {
             getMessagesController().openByUserName(LocaleController.getString(R.string.OfficialChannelUsername), this, 1);
         } else if (id == sourceCodeRow) {
-            Browser.openUrl(getParentActivity(), "https://codeberg.org/pqcs/ImperGram");
+            Browser.openUrl(getParentActivity(), "https://github.com/oxxx1mif/pqcs-ImperGram");
         }
     }
 
@@ -245,9 +245,9 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
         searchResultList.add(new ProfileActivity.SearchAdapter.SearchResult(
                 20002,
                 LocaleController.getString(R.string.ViewSourceCode),
-                "Codeberg",
+                "GitHub",
                 R.drawable.msg2_help,
-                () -> Browser.openUrl(getParentActivity(), "https://codeberg.org/pqcs/ImperGram")
+                () -> Browser.openUrl(getParentActivity(), "https://github.com/oxxx1mif/pqcs-ImperGram")
         ));
 
         return searchResultList;

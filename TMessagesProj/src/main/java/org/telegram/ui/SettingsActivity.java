@@ -62,6 +62,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.common.collect.Lists;
+import com.pqcs.impergram.settings.ImperSettingsActivity;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
@@ -705,6 +706,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         items.add(UItem.asShadow(null));
 
         items.add(SettingCell.Factory.of(50, 0xFFD1E4FF, 0xFF9EC5FF, R.drawable.filled_profile_settings, getString(R.string.NekoSettings)));
+        items.add(SettingCell.Factory.of(51, 0xFFFFF5C0, 0xFFBCE1FF, R.drawable.filled_profile_settings, getString(R.string.ImperSettings)));
 
         items.add(UItem.asShadow(null));
 
@@ -890,6 +892,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
             case 50: {
                 presentSettingFragment(new NekoSettingsActivity());
+                break;
+            }
+            case 51: {
+                presentSettingFragment(new ImperSettingsActivity());
                 break;
             }
         }

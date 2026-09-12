@@ -3,6 +3,8 @@ package tw.nekomimi.nekogram.helpers;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.pqcs.impergram.settings.ImperSettingsActivity;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -75,6 +77,9 @@ public class SettingsHelper {
                     case "update":
                         LaunchActivity.instance.checkAppUpdate(true, progress);
                         return;
+                    case "im":
+                        fragment = new ImperSettingsActivity();
+                        break;
                     default:
                         unknown.run();
                         return;
