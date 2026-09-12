@@ -336,6 +336,7 @@
     <string name="MiniSenderAvatar">Sender mini photo</string>
 
     <string name="OffTgUsChannelImper" translatable="false">guamain</string>
+    <string name="CustomNoiseSuppressor">Custom Noise Suppressor</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Accessibility settings</string>

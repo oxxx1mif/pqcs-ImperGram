@@ -47,8 +47,6 @@ import java.util.Locale;
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
 import tw.nekomimi.nekogram.settings.BaseNekoSettingsActivity;
-import tw.nekomimi.nekogram.settings.NekoChatSettingsActivity;
-import tw.nekomimi.nekogram.settings.NekoExperimentalSettingsActivity;
 
 public class ImperSettingsActivity extends BaseNekoSettingsActivity implements FactorAnimator.Target {
     private static final int ANIMATOR_ID_SEARCH_PAGE_VISIBLE = 0;
@@ -164,7 +162,7 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
         }
         var id = item.id;
         if (id == experimentRow) {
-            presentFragment(new NekoChatSettingsActivity());
+            presentFragment(new ImperExperimentalSettingsActivity());
         } else if (id == channelRow) {
             getMessagesController().openByUserName(LocaleController.getString(R.string.OffTgUsChannelImper), this, 1);
         } else if (id == sourceCodeRow) {
@@ -196,7 +194,7 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
 
     private ArrayList<ProfileActivity.SearchAdapter.SearchResult> createSearchArray() {
         var searchResultList = new ArrayList<ProfileActivity.SearchAdapter.SearchResult>();
-        var fragment = new NekoExperimentalSettingsActivity();
+        var fragment = new ImperExperimentalSettingsActivity();
         var items = new ArrayList<UItem>();
         fragment.fillItemsPublic(items, null);
         var fragmentTitle = fragment.getActionBarTitlePublic();
@@ -219,7 +217,7 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
                     fragmentTitle.equals(headerText) ? null : headerText,
                     R.drawable.msg_fave,
                     () -> {
-                        var fragment1 = new NekoExperimentalSettingsActivity();
+                        var fragment1 = new ImperExperimentalSettingsActivity();
                         presentFragment(fragment1);
                         AndroidUtilities.runOnUIThread(() -> fragment1.scrollToRow(item.slug, () -> {
                         }));
