@@ -50,6 +50,7 @@ public class ImperExperimentalSettingsActivity extends BaseNekoSettingsActivity 
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ImperConfig.customNoiseSuppressor);
             }
+            showRestartBulletin();
         } else if (id == settingsCustomNoiseSuppressorRow) {
             presentFragment(new ImperNoiseSuppressorSettingsActivity());
         }

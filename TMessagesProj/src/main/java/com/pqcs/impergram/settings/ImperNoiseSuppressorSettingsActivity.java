@@ -26,7 +26,7 @@ public class ImperNoiseSuppressorSettingsActivity extends BaseNekoSettingsActivi
 
     @Override
     protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
-        items.add(UItem.asHeader(LocaleController.getString(R.string.Experiment)));
+        items.add(UItem.asHeader(LocaleController.getString(R.string.General)));
 
         items.add(UItem.asShadow(null));
     }
