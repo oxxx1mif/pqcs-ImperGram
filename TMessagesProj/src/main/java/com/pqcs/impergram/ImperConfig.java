@@ -1,3 +1,11 @@
+/*
+ * This is the source code of Impergram for Android v. 5.x.x.
+ * It is licensed under GNU GPL v. 2 or later.
+ * You should have received a copy of the license in this archive (see LICENSE).
+ *
+ * Copyright Gleb Obitotsky <gleb.obitotsky@gmail.com>, 2026.
+ */
+
 package com.pqcs.impergram;
 
 import android.app.Activity;
@@ -13,6 +21,7 @@ import java.util.Set;
 
 public class ImperConfig {
     public static boolean customNoiseSuppressor = false;
+    public static boolean blurPhone = false;
 
     private static final SharedPreferences preferences =
             ApplicationLoader.applicationContext.getSharedPreferences("imperconfig", Activity.MODE_PRIVATE);
@@ -28,6 +37,7 @@ public class ImperConfig {
             return;
         }
         customNoiseSuppressor = preferences.getBoolean("customNoiseSuppressor", false);
+        blurPhone = preferences.getBoolean("blurPhone", false);
         configLoaded = true;
     }
 
@@ -36,10 +46,18 @@ public class ImperConfig {
         preferences.edit().putBoolean("customNoiseSuppressor", customNoiseSuppressor).apply();
     }
 
+    public static void toggleBlurPhone() {
+        blurPhone = !blurPhone;
+        preferences.edit().putBoolean("blurPhone", blurPhone).apply();
+    }
+
     public static String exportConfigs() {
         var object = new JsonObject();
         if (preferences.contains("customNoiseSuppressor")) {
             object.addProperty("customNoiseSuppressor", preferences.getBoolean("customNoiseSuppressor", false));
+        }
+        if (preferences.contains("blurPhone")) {
+            object.addProperty("blurPhone", preferences.getBoolean("blurPhone", false));
         }
         return object.toString();
     }
@@ -54,6 +72,9 @@ public class ImperConfig {
         editor.clear();
         if (object.has("customNoiseSuppressor")) {
             editor.putBoolean("customNoiseSuppressor", object.get("customNoiseSuppressor").getAsBoolean());
+        }
+        if (object.has("blurPhone")) {
+            editor.putBoolean("blurPhone", object.get("blurPhone").getAsBoolean());
         }
         editor.apply();
         loadConfig(true);

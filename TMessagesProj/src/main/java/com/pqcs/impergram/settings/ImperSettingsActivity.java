@@ -54,6 +54,7 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
     private final BoolAnimator animatorSearchPageVisible = new BoolAnimator(ANIMATOR_ID_SEARCH_PAGE_VISIBLE,
             this, CubicBezierInterpolator.EASE_OUT_QUINT, 350);
 
+    private final int generalRow = rowId++;
     private final int experimentRow = rowId++;
     private final int channelRow = rowId++;
     private final int sourceCodeRow = rowId++;
@@ -126,6 +127,16 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
                 search(editText.getText().toString());
             }
         });
+
+        syncItem = menu.addItem(R.drawable.msg_channel, LocaleController.getString(R.string.OfficialChannel));
+        syncItem.setOnClickListener(v -> {
+            getMessagesController().openByUserName(
+                    LocaleController.getString(R.string.OffTgUsChannelImper),
+                    ImperSettingsActivity.this,
+                    1
+            );
+        });
+
         return fragmentView;
     }
 
@@ -144,6 +155,7 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
 
         items.add(UItem.asCustomShadow(topView, 200 - 12));
 
+        items.add(UItem.asButton(generalRow, R.drawable.msg_settings, LocaleController.getString(R.string.General)).slug("general"));
         items.add(UItem.asButton(experimentRow, R.drawable.msg_fave, LocaleController.getString(R.string.ExperimentalSettings)).slug("experiment"));
         items.add(UItem.asShadow(null));
 
@@ -161,7 +173,9 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
             return;
         }
         var id = item.id;
-        if (id == experimentRow) {
+        if (id == generalRow) {
+            presentFragment(new ImperGeneralSettingsActivity());
+        } else if (id == experimentRow) {
             presentFragment(new ImperExperimentalSettingsActivity());
         } else if (id == channelRow) {
             getMessagesController().openByUserName(LocaleController.getString(R.string.OffTgUsChannelImper), this, 1);
@@ -209,12 +223,27 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
                 continue;
             }
             if (TextUtils.isEmpty(item.slug)) continue;
+            String subtitle = fragmentTitle.equals(headerText) ? null : headerText;
             searchResultList.add(new ProfileActivity.SearchAdapter.SearchResult(
                     item.id,
                     item.text.toString(),
                     null,
                     fragmentTitle,
-                    fragmentTitle.equals(headerText) ? null : headerText,
+                    subtitle,
+                    R.drawable.msg_settings,
+                    () -> {
+                        var fragment1 = new ImperGeneralSettingsActivity();
+                        presentFragment(fragment1);
+                        AndroidUtilities.runOnUIThread(() -> fragment1.scrollToRow(item.slug, () -> {
+                        }));
+                    }
+            ));
+            searchResultList.add(new ProfileActivity.SearchAdapter.SearchResult(
+                    item.id,
+                    item.text.toString(),
+                    null,
+                    fragmentTitle,
+                    subtitle,
                     R.drawable.msg_fave,
                     () -> {
                         var fragment1 = new ImperExperimentalSettingsActivity();

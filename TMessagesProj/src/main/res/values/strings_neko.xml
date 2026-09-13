@@ -339,6 +339,7 @@
     <string name="CustomNoiseSuppressor">Custom Noise Suppressor</string>
     <string name="ExperimentalSettings">Experimental</string>
     <string name="NoiseCancellationSettings">Noise cancellation settings</string>
+    <string name="BlurPhone">Blur phone number</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Accessibility settings</string>

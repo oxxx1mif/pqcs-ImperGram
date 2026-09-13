@@ -325,6 +325,7 @@
     <string name="CustomNoiseSuppressor">Шумоподавление</string>
     <string name="ExperimentalSettings">Экспериментальные</string>
     <string name="NoiseCancellationSettings">Настройки шумоподавления</string>
+    <string name="BlurPhone">Блюр телефонного номераr</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Настройки доступности</string>

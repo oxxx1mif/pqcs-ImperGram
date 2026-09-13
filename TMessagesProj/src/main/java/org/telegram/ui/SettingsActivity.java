@@ -1,5 +1,6 @@
 package org.telegram.ui;
 
+import static com.pqcs.impergram.ImperConfig.blurPhone;
 import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.AndroidUtilities.lerp;
 import static org.telegram.messenger.AndroidUtilities.replaceSingleTag;
@@ -531,6 +532,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         setInfo(getUserConfig().getCurrentUser());
     }
 
+    char[] spoilerNumber = new char[] {
+            '⠌', '⡢', '⢑', '⠨', '⠥', '⠮', '⡑'
+    };
+
     public void setInfo(TLRPC.User user) {
         if (avatarView == null) return;
         if (avatarUploadingRequest != -1) return;
@@ -540,7 +545,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         titleView.setText(UserObject.getUserName(user));
         final StringBuilder sb = new StringBuilder();
         if (user != null) {
-            sb.append(PhoneFormat.getInstance().format("+" + user.phone));
+            if (blurPhone) {
+                sb.append(spoilerNumber);
+            } else { sb.append(PhoneFormat.getInstance().format("+" + user.phone)); }
         }
         final String username = UserObject.getPublicUsername(user);
         if (username != null) {
