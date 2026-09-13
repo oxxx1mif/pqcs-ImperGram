@@ -13702,7 +13702,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             phoneNumber = null;
                         }
                         if (blurPhone && phoneNumber != null) {
-                            text = spoilerNumber.toString();
+                            text = spoilerNumber;
                         }
                         isFragmentPhoneNumber = phoneNumber != null && phoneNumber.matches("888\\d{8}");
                         detailCell.setTextAndValue(text, LocaleController.getString(isFragmentPhoneNumber ? R.string.AnonymousNumber : R.string.PhoneMobile), false);
@@ -13818,7 +13818,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             value = LocaleController.getString(R.string.NumberUnknown);
                         }
                         if (blurPhone && user != null && !TextUtils.isEmpty(user.phone)) {
-                            value = spoilerNumber.toString();
+                            value = spoilerNumber;
                         }
                         detailCell.setTextAndValue(value, LocaleController.getString(R.string.TapToChangePhone), true);
                         detailCell.setContentDescriptionValueFirst(false);
