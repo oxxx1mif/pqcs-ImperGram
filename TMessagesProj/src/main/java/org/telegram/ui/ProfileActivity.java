@@ -130,6 +130,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.pqcs.impergram.ImperVerification;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -11269,6 +11271,38 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         return verifiedCrossfadeDrawable[a];
     }
 
+    private CrossfadeDrawable[] imperVerifiedDrawable = new CrossfadeDrawable[2];
+    private Drawable[] imperPlaneDrawable = new Drawable[2];
+
+    private Drawable getImperVerifiedDrawable(int a) {
+        if (imperVerifiedDrawable[a] == null) {
+            Drawable check = ImperVerification.getVerifiedDrawable(getParentActivity());
+            Drawable checkInner = Theme.profile_verifiedCheckDrawable.getConstantState().newDrawable().mutate();
+            checkInner.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+
+            CombinedDrawable combined = new CombinedDrawable(check, checkInner);
+
+            Drawable plane = ImperVerification.getPlaneDrawable(getParentActivity());
+            if (plane != null) plane.setColorFilter(
+                    getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY);
+
+            imperVerifiedDrawable[a] = new CrossfadeDrawable(combined, plane);
+        }
+        imperVerifiedDrawable[a].setProgress(currentExpandAnimatorValue);
+        return imperVerifiedDrawable[a];
+    }
+
+    private Drawable getImperPlaneLeft(int a) {
+        if (imperPlaneDrawable[a] == null) {
+            imperPlaneDrawable[a] = ImperVerification.getPlaneDrawable(getParentActivity());
+            if (imperPlaneDrawable[a] != null) {
+                imperPlaneDrawable[a].setColorFilter(
+                        getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY);
+            }
+        }
+        return imperPlaneDrawable[a];
+    }
+
     private Drawable getPremiumCrossfadeDrawable(int a) {
         if (premiumCrossfadeDrawable[a] == null) {
             premiumStarDrawable[a] = ContextCompat.getDrawable(getParentActivity(), R.drawable.msg_premium_liststar).mutate();
@@ -11493,7 +11527,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 updatedPeerColor();
             }
             if (topView != null) {
-                topView.setBackgroundEmojiId(UserObject.getProfileEmojiId(user), user != null && user.emoji_status instanceof TLRPC.TL_emojiStatusCollectible, true);
+                long emojiId = UserObject.getProfileEmojiId(user);
+                long custom = ImperVerification.getCustomProfileEmoji();
+                if (custom != 0 && ImperVerification.isVerifiedUser(user.id)) {
+                    emojiId = custom;
+                }
+                topView.setBackgroundEmojiId(emojiId,
+                        user != null && user.emoji_status instanceof TLRPC.TL_emojiStatusCollectible, true);
             }
             if (ratingView != null) {
                 ratingView.updateColors(peerColor);
@@ -11638,6 +11678,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (user.scam || user.fake) {
                         nameTextView[a].setRightDrawable2(getScamDrawable(user.scam ? 0 : 1));
                         nameTextViewRightDrawable2ContentDescription = LocaleController.getString(R.string.ScamMessage);
+                    } else if (ImperVerification.isVerifiedUser(user.id)) {
+                        nameTextView[a].setRightDrawable2(getImperVerifiedDrawable(a));
+                        nameTextViewRightDrawable2ContentDescription = "Verif " + ImperVerification.VERIFIER_NAME;
+                        nameTextView[a].setLeftDrawableOutside(true);
+                        nameTextView[a].setLeftDrawable(getImperPlaneLeft(a));
                     } else if (user.verified) {
                         nameTextView[a].setRightDrawable2(getVerifiedCrossfadeDrawable(a));
                         nameTextViewRightDrawable2ContentDescription = LocaleController.getString(R.string.AccDescrVerified);
@@ -11665,6 +11710,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (a == 1) {
                     if (user.scam || user.fake) {
                         nameTextView[a].setRightDrawable2(getScamDrawable(user.scam ? 0 : 1));
+                    } else if (ImperVerification.isVerifiedUser(user.id)) {
+                        nameTextView[a].setRightDrawable2(getImperVerifiedDrawable(a));
+                        nameTextViewRightDrawable2ContentDescription = "Verif " + ImperVerification.VERIFIER_NAME;
+                        nameTextView[a].setLeftDrawableOutside(true);
+                        nameTextView[a].setLeftDrawable(getImperPlaneLeft(a));
                     } else if (user.verified) {
                         nameTextView[a].setRightDrawable2(getVerifiedCrossfadeDrawable(a));
                     } else {
@@ -11813,7 +11863,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 updatedPeerColor();
             }
             if (topView != null) {
-                topView.setBackgroundEmojiId(ChatObject.getProfileEmojiId(chat), chat != null && chat.emoji_status instanceof TLRPC.TL_emojiStatusCollectible, true);
+                long emojiId = ChatObject.getProfileEmojiId(chat);
+                long custom = ImperVerification.getCustomProfileEmoji();
+                if (custom != 0 && ImperVerification.isVerifiedChat(chatId)) {
+                    emojiId = custom;
+                }
+                topView.setBackgroundEmojiId(emojiId,
+                        chat != null && chat.emoji_status instanceof TLRPC.TL_emojiStatusCollectible, true);
             }
             setCollectibleGiftStatus(chat.emoji_status instanceof TLRPC.TL_emojiStatusCollectible ? (TLRPC.TL_emojiStatusCollectible) chat.emoji_status : null);
 
@@ -11957,6 +12013,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (chat.scam || chat.fake) {
                         nameTextView[a].setRightDrawable2(getScamDrawable(chat.scam ? 0 : 1));
                         nameTextViewRightDrawableContentDescription = LocaleController.getString(R.string.ScamMessage);
+                    } else if (ImperVerification.isVerifiedChat(chatId)) {
+                        nameTextView[a].setRightDrawable2(getImperVerifiedDrawable(a));
+                        nameTextViewRightDrawable2ContentDescription = "Verif " + ImperVerification.VERIFIER_NAME;
+                        nameTextView[a].setLeftDrawableOutside(true);
+                        nameTextView[a].setLeftDrawable(getImperPlaneLeft(a));
                     } else if (chat.verified) {
                         nameTextView[a].setRightDrawable2(getVerifiedCrossfadeDrawable(a));
                         nameTextViewRightDrawableContentDescription = LocaleController.getString(R.string.AccDescrVerified);
@@ -11988,6 +12049,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (!copyFromChatActivity) {
                     if (chat.scam || chat.fake) {
                         nameTextView[a].setRightDrawable2(getScamDrawable(chat.scam ? 0 : 1));
+                    } else if (ImperVerification.isVerifiedChat(chatId)) {
+                        nameTextView[a].setRightDrawable2(getImperVerifiedDrawable(a));
+                        nameTextViewRightDrawable2ContentDescription = "Verif " + ImperVerification.VERIFIER_NAME;
+                        nameTextView[a].setLeftDrawableOutside(true);
+                        nameTextView[a].setLeftDrawable(getImperPlaneLeft(a));
                     } else if (chat.verified) {
                         nameTextView[a].setRightDrawable2(getVerifiedCrossfadeDrawable(a));
                     } else if (getMessagesController().isDialogMuted(-chatId, topicId)) {

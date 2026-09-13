@@ -30,6 +30,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.pqcs.impergram.ImperVerification;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
@@ -694,7 +696,27 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             botVerification.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
             nameTextView.setLeftDrawable(botVerification);
         }
-        if (currentUser != null && MessagesController.getInstance(currentAccount).isPremiumUser(currentUser) && !MessagesController.getInstance(currentAccount).premiumFeaturesBlocked()) {
+
+        long imperId = 0;
+        if (currentUser != null) imperId = currentUser.id;
+        else if (currentChat != null) imperId = -currentChat.id;
+
+        if (ImperVerification.isVerifiedAny(imperId)) {
+            Drawable check = ImperVerification.getVerifiedDrawable(getContext());
+            if (check != null) {
+                check.setColorFilter(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider),
+                        PorterDuff.Mode.MULTIPLY);
+            }
+            nameTextView.setRightDrawable(check);
+
+            Drawable plane = ImperVerification.getPlaneDrawable(getContext());
+            if (plane != null) {
+                plane.setColorFilter(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider),
+                        PorterDuff.Mode.MULTIPLY);
+            }
+            nameTextView.setLeftDrawable(plane);
+            nameTextView.setLeftDrawableTopPadding(-dp(1.3f));
+        } else if (currentUser != null && MessagesController.getInstance(currentAccount).isPremiumUser(currentUser) && !MessagesController.getInstance(currentAccount).premiumFeaturesBlocked()) {
             if (DialogObject.getEmojiStatusDocumentId(currentUser.emoji_status) != 0) {
                 emojiStatus.set(DialogObject.getEmojiStatusDocumentId(currentUser.emoji_status), false);
                 emojiStatus.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));

@@ -41,6 +41,8 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.pqcs.impergram.ImperVerification;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BirthdayController;
@@ -139,6 +141,33 @@ public class ProfileActivity2 extends BaseFragment implements
     private static final String spoilerNumber = new String(new char[]{
             '⠌', '⡢', '⢑', '⠨', '⠥', '⠮', '⡑'
     });
+
+    private android.graphics.drawable.Drawable[] imperVerifiedDrawable = new android.graphics.drawable.Drawable[2];
+    private android.graphics.drawable.Drawable[] imperPlaneDrawable = new android.graphics.drawable.Drawable[2];
+
+    private android.graphics.drawable.Drawable getImperVerifiedDrawable() {
+        if (imperVerifiedDrawable[0] == null) {
+            android.graphics.drawable.Drawable d = ImperVerification.getVerifiedDrawable(getParentActivity());
+            if (d != null) {
+                d.setColorFilter(getThemedColor(Theme.key_profile_verifiedBackground),
+                        android.graphics.PorterDuff.Mode.MULTIPLY);
+            }
+            imperVerifiedDrawable[0] = d;
+        }
+        return imperVerifiedDrawable[0];
+    }
+
+    private android.graphics.drawable.Drawable getImperPlaneLeft() {
+        if (imperPlaneDrawable[0] == null) {
+            android.graphics.drawable.Drawable d = ImperVerification.getPlaneDrawable(getParentActivity());
+            if (d != null) {
+                d.setColorFilter(getThemedColor(Theme.key_profile_verifiedBackground),
+                        android.graphics.PorterDuff.Mode.MULTIPLY);
+            }
+            imperPlaneDrawable[0] = d;
+        }
+        return imperPlaneDrawable[0];
+    }
 
     @Override
     public boolean onFragmentCreate() {
@@ -729,6 +758,10 @@ public class ProfileActivity2 extends BaseFragment implements
     }
 
     private void onClick(UItem item, View view, int position, float x, float y) {
+        if (ImperVerification.isVerifiedAny(dialogId)
+                && ImperVerification.shouldShowBulletin(dialogId)) {
+            ImperVerification.showVerifiedBulletin(this, chat != null);
+        }
         if (item.id == ID_BIZ_HOURS) {
             hoursExpanded = !hoursExpanded;
             listView.adapter.update(true);
@@ -743,6 +776,13 @@ public class ProfileActivity2 extends BaseFragment implements
 
         if (user != null) {
             title.setText(UserObject.getUserName(user));
+            if (ImperVerification.isVerifiedUser(user.id)) {
+                title.setRightDrawable(getImperVerifiedDrawable());
+                title.setLeftDrawable(getImperPlaneLeft());
+            } else {
+                title.setRightDrawable(null);
+                title.setLeftDrawable(null);
+            }
             if (self) {
                 subtitle.setText(getString(R.string.Online));
             } else if (dialogId == UserObject.VERIFY) {
@@ -762,6 +802,13 @@ public class ProfileActivity2 extends BaseFragment implements
             }
         } else if (chat != null) {
             title.setText(chat.title);
+            if (ImperVerification.isVerifiedChat(chat.id)) {
+                title.setRightDrawable(getImperVerifiedDrawable());
+                title.setLeftDrawable(getImperPlaneLeft());
+            } else {
+                title.setRightDrawable(null);
+                title.setLeftDrawable(null);
+            }
             if (chat.megagroup) {
                 if (onlineCount > 1 && chatInfo != null && chatInfo.participants_count != 0) {
                     subtitle.setText(String.format("%s, %s", formatPluralString("Members", chatInfo.participants_count), formatPluralString("OnlineCount", Math.min(onlineCount, chatInfo.participants_count))));

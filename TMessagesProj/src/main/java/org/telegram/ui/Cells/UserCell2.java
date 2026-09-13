@@ -12,9 +12,12 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import com.pqcs.impergram.ImperVerification;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -305,6 +308,29 @@ public class UserCell2 extends FrameLayout {
         }
 
         avatarImageView.setRoundRadius(currentChat != null && currentChat.forum ? AndroidUtilities.dp(14) : AndroidUtilities.dp(24));
+
+        long imperId = 0;
+        if (currentUser != null) imperId = currentUser.id;
+        else if (currentChat != null) imperId = -currentChat.id;
+
+        if (ImperVerification.isVerifiedAny(imperId)) {
+            Drawable check = ImperVerification.getVerifiedDrawable(getContext());
+            if (check != null) {
+                check.setColorFilter(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider),
+                        PorterDuff.Mode.MULTIPLY);
+            }
+            nameTextView.setRightDrawable(check);
+
+            Drawable plane = ImperVerification.getPlaneDrawable(getContext());
+            if (plane != null) {
+                plane.setColorFilter(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider),
+                        PorterDuff.Mode.MULTIPLY);
+            }
+            nameTextView.setLeftDrawable(plane);
+        } else {
+            nameTextView.setRightDrawable(null);
+            nameTextView.setLeftDrawable(null);
+        }
 
         if (imageView.getVisibility() == VISIBLE && currentDrawable == 0 || imageView.getVisibility() == GONE && currentDrawable != 0) {
             imageView.setVisibility(currentDrawable == 0 ? GONE : VISIBLE);
