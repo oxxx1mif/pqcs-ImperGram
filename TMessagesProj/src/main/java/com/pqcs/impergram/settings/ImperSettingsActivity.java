@@ -128,14 +128,12 @@ public class ImperSettingsActivity extends BaseNekoSettingsActivity implements F
             }
         });
 
-        syncItem = menu.addItem(R.drawable.msg_channel, LocaleController.getString(R.string.OfficialChannel));
-        syncItem.setOnClickListener(v -> {
-            getMessagesController().openByUserName(
-                    LocaleController.getString(R.string.OffTgUsChannelImper),
-                    ImperSettingsActivity.this,
-                    1
-            );
-        });
+        syncItem = menu.addItem(R.drawable.msg_channel, "");
+        syncItem.setOnClickListener(v -> getMessagesController().openByUserName(
+                LocaleController.getString(R.string.OffTgUsChannelImper),
+                ImperSettingsActivity.this,
+                1
+        ));
 
         return fragmentView;
     }

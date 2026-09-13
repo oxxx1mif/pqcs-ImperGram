@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="AppNameNeko" translatable="false">ImperGram</string>
-    <string name="Nekogram" translatable="false">Nekogram</string>
+    <string name="Nekogram" translatable="false">ImperGram</string>
+    <string name="NekoSettingsIon" translatable="false">NekoGram</string>
     <string name="NekogramBeta" translatable="false">ImperGram Beta</string>
     <string name="NekoSettings">Neko Settings</string>
     <string name="PreferIPv6">Prefer connecting through IPv6</string>
@@ -67,7 +68,7 @@
     <string name="IgnoreBlockedAbout">IT IS NOT REALLY HIDE! Messages are still available to view, but text will be converted to Spoiler and media won\'t auto download.</string>
     <string name="Donate">Donate</string>
     <string name="DonateAbout">Support our development.</string>
-    <string name="TranslationAbout">Help us to translate ImperGram to your language.</string>
+    <string name="TranslationAbout">Help us to translate NekoGram to your language.</string>
     <string name="Translation">Translate Nekogram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="ResetStickerSize">Reset sticker size</string>

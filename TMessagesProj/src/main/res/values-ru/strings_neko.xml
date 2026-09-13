@@ -64,8 +64,8 @@
     <string name="IgnoreBlockedAbout">ОНИ НА САМОМ ДЕЛЕ НЕ СКРЫВАЮТСЯ! Сообщения будут доступны для просмотра, но текст будет скрыт под спойлер, а автозагрузка медиа будет отключена.</string>
     <string name="Donate">Поддержать Nekogram</string>
     <string name="DonateAbout">Поддержите разработку проекта.</string>
-    <string name="TranslationAbout">Помогите перевести ImperGram на ваш язык.</string>
-    <string name="Translation">Помочь перевести ImperGram</string>
+    <string name="TranslationAbout">Помогите перевести NekoGram на ваш язык.</string>
+    <string name="Translation">Помочь перевести NekoGram</string>
     <string name="GooglePlay">Google Play</string>
     <string name="ResetStickerSize">Сбросить размер стикера</string>
     <string name="OfficialChannelUsername">nekoupdates</string>

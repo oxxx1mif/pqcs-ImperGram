@@ -8,6 +8,7 @@
 
 package org.telegram.ui;
 
+import static com.pqcs.impergram.ImperConfig.blurPhone;
 import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.AndroidUtilities.dpf2;
 import static org.telegram.messenger.AndroidUtilities.ilerp;
@@ -770,6 +771,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     HashSet<Integer> notificationsExceptionTopics = new HashSet<>();
 
     private CharacterStyle loadingSpan;
+
+    char[] spoilerNumber = new char[] {
+            '⠌', '⡢', '⢑', '⠨', '⠥', '⠮', '⡑'
+    };
 
     private final Property<ProfileActivity, Float> HEADER_SHADOW = new AnimationProperties.FloatProperty<ProfileActivity>("headerShadow") {
         @Override
@@ -13696,6 +13701,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             text = LocaleController.getString(R.string.PhoneHidden);
                             phoneNumber = null;
                         }
+                        if (blurPhone && phoneNumber != null) {
+                            text = spoilerNumber.toString();
+                        }
                         isFragmentPhoneNumber = phoneNumber != null && phoneNumber.matches("888\\d{8}");
                         detailCell.setTextAndValue(text, LocaleController.getString(isFragmentPhoneNumber ? R.string.AnonymousNumber : R.string.PhoneMobile), false);
                     } else if (position == noteRow) {
@@ -13808,6 +13816,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             value = PhoneFormat.getInstance().format("+" + user.phone);
                         } else {
                             value = LocaleController.getString(R.string.NumberUnknown);
+                        }
+                        if (blurPhone && user != null && !TextUtils.isEmpty(user.phone)) {
+                            value = spoilerNumber.toString();
                         }
                         detailCell.setTextAndValue(value, LocaleController.getString(R.string.TapToChangePhone), true);
                         detailCell.setContentDescriptionValueFirst(false);

@@ -1,5 +1,6 @@
 package org.telegram.ui;
 
+import static com.pqcs.impergram.ImperConfig.blurPhone;
 import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.AndroidUtilities.dpf2;
 import static org.telegram.messenger.AndroidUtilities.lerp;
@@ -134,6 +135,10 @@ public class ProfileActivity2 extends BaseFragment implements
     public boolean isSelf() {
         return self;
     }
+
+    private static final String spoilerNumber = new String(new char[]{
+            '⠌', '⡢', '⢑', '⠨', '⠥', '⠮', '⡑'
+    });
 
     @Override
     public boolean onFragmentCreate() {
@@ -562,11 +567,22 @@ public class ProfileActivity2 extends BaseFragment implements
             phoneNumber = null;
         }
 
+        CharSequence display;
+        if (phoneNumber != null) {
+            if (blurPhone) {
+                display = spoilerNumber;
+            } else {
+                display = PhoneFormat.getInstance().format("+" + phoneNumber);
+            }
+        } else {
+            display = getString(R.string.PhoneHidden);
+        }
+
         final boolean isFragment = phoneNumber != null && phoneNumber.matches("888\\d{8}");
         items.add(TextDetailCell.Factory.of(
-            ID_PHONE,
-            phoneNumber != null ? PhoneFormat.getInstance().format("+" + phoneNumber) : getString(R.string.PhoneHidden),
-            isFragment ? getString(R.string.AnonymousNumber) : getString(R.string.PhoneMobile)
+                ID_PHONE,
+                display,
+                isFragment ? getString(R.string.AnonymousNumber) : getString(R.string.PhoneMobile)
         ));
     }
     private void addUsernameRow(ArrayList<UItem> items) {
