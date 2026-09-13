@@ -74,12 +74,12 @@ public class ImperVerification {
     public static long getCustomProfileEmoji() { return CUSTOM_PROFILE_EMOJI; }
 
     public static Drawable getVerifiedDrawable(Context context) {
-        Drawable d = ContextCompat.getDrawable(context, R.drawable.verified_profile);
+        Drawable d = ContextCompat.getDrawable(context, R.drawable.notification);
         return d != null ? d.mutate() : null;
     }
 
     public static Drawable getPlaneDrawable(Context context) {
-        Drawable d = ContextCompat.getDrawable(context, R.drawable.msg_premium_liststar);
+        Drawable d = ContextCompat.getDrawable(context, R.drawable.notification);
         return d != null ? d.mutate() : null;
     }
 
@@ -100,7 +100,7 @@ public class ImperVerification {
 
         try {
             BulletinFactory.of(fragment)
-                    .createSimpleBulletin(R.drawable.verified_profile, sb)
+                    .createSimpleBulletin(R.drawable.notification, sb)
                     .show();
         } catch (Exception ignore) {}
     }
