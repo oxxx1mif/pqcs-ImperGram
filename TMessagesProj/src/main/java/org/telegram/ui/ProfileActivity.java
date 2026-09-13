@@ -772,9 +772,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private CharacterStyle loadingSpan;
 
-    char[] spoilerNumber = new char[] {
+    private static final String spoilerNumber = new String(new char[]{
             '⠌', '⡢', '⢑', '⠨', '⠥', '⠮', '⡑'
-    };
+    });
 
     private final Property<ProfileActivity, Float> HEADER_SHADOW = new AnimationProperties.FloatProperty<ProfileActivity>("headerShadow") {
         @Override
