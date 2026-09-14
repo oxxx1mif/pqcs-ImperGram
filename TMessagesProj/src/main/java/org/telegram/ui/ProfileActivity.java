@@ -11463,7 +11463,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             actionsView.updatePosition(listView.getMeasuredWidth(), dp(74));
         } else {
             actionsView.clipHeight = -1;
-            float bottom = extraHeight + newTop - dp(hasMusic ? 25 : 0);
+            float bottom = extraHeight + newTop;
             float height = Math.min(dp(74), bottom - newTop);
             actionsView.updatePosition(bottom - height, height);
         }
@@ -17503,6 +17503,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             currentArtist = fArtist;
 
             artworkView.setImageDrawable(null);
+
+            TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 100);
+            if (thumb != null) {
+                artworkView.setImage(
+                        ImageLocation.getForDocument(thumb, document),
+                        "100_100",
+                        (Drawable) null,
+                        document
+                );
+            }
 
             currentListener = (t, a, path) -> {
                 if (!MusicArtworkCache.keyFor(t, a).equals(currentKey)) return;
