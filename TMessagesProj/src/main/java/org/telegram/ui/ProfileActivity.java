@@ -131,6 +131,8 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.pqcs.impergram.ImperVerification;
+import com.pqcs.impergram.music.MusicArtworkCache;
+import com.pqcs.impergram.music.MusicArtworkLoader;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
@@ -732,6 +734,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int balanceDividerRow;
     private int blockedUsersRow;
     private int membersSectionRow;
+    private int musicRow;
     private boolean hasMusic;
 
     private int sharedMediaRow;
@@ -3862,6 +3865,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         sharedMediaLayout.initBlurCapture((ViewGroup) fragmentView);
 //        sharedMediaLayout.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
         if (userId == 0 || imageUpdater == null || myProfile) {
+            /*
             musicView = new ProfileMusicView(context, resourcesProvider);
             if (avatarsBlurView != null) {
                 avatarsBlurView.setMusicView(musicView);
@@ -3901,6 +3905,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     showDialog(new AudioPlayerAlert(getContext(), getResourceProvider()));
                 }
             });
+             */
 
             actionsView = new ProfileActionsView(context, dp(74));
             setActionsMode();
@@ -4468,6 +4473,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (button != null) {
                     button.setTextColor(Theme.getColor(Theme.key_text_RedBold));
                 }
+            } else if (position == musicRow) {
+                openSavedMusicPlayer();
             } else if (position == settingsKeyRow) {
                 Bundle args = new Bundle();
                 args.putInt("chat_id", DialogObject.getEncryptedChatId(dialogId));
@@ -5516,10 +5523,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             avatarsBlurView.setActionsView(actionsView);
             avatarContainer2.addView(actionsView, LayoutHelper.createFrame(-1, -1));
         }
-        if (musicView != null) {
-            avatarsBlurView.setMusicView(musicView);
-            avatarContainer2.addView(musicView, LayoutHelper.createFrame(-1, -1));
-        }
+        //if (musicView != null) {
+        //    avatarsBlurView.setMusicView(musicView);
+        //    avatarContainer2.addView(musicView, LayoutHelper.createFrame(-1, -1));
+        //}
         avatarImage.setAvatarsViewPager(avatarsViewPager);
 
         avatarsViewPagerIndicatorView = new PagerIndicatorView(context);
@@ -6118,7 +6125,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int getActionsExtraHeight(boolean withMusic) {
         if (userId != 0 && imageUpdater != null && !myProfile)
             return 0;
-        return dp(74 + (withMusic && hasMusic ? 25 : 0));
+        return dp(74);
     }
 
     private int getHeaderExtraHeight() {
@@ -6349,9 +6356,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (actionsView != null) {
             actionsView.setParentExpanded(value);
         }
-        if (musicView != null) {
-            musicView.setParentExpanded(value);
-        }
+        //if (musicView != null) {
+        //    musicView.setParentExpanded(value);
+        //}
         if (searchItem != null) {
             searchItem.setAlpha(1.0f - value);
             searchItem.setScaleY(1.0f - value);
@@ -7021,6 +7028,35 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             return true;
         });
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeSearchByActiveAction);
+    }
+
+    private void openSavedMusicPlayer() {
+        if (savedMusicList == null) {
+            if (MediaController.getInstance().currentSavedMusicList != null &&
+                    MediaController.getInstance().currentSavedMusicList.currentAccount == currentAccount &&
+                    MediaController.getInstance().currentSavedMusicList.dialogId == getDialogId()) {
+                savedMusicList = MediaController.getInstance().currentSavedMusicList;
+            } else {
+                savedMusicList = new MessagesController.SavedMusicList(currentAccount, getDialogId());
+                if (userInfo != null && userInfo.saved_music != null) {
+                    savedMusicList.setup(userInfo.saved_music);
+                }
+            }
+        }
+        if (!savedMusicList.list.isEmpty()) {
+            boolean sameList = false;
+            if (MediaController.getInstance().currentSavedMusicList != savedMusicList ||
+                    !MediaController.getInstance().isPlayingMessage(savedMusicList.list.get(0))) {
+                MediaController.getInstance().cleanup();
+            } else {
+                sameList = true;
+            }
+            MediaController.getInstance().currentSavedMusicList = savedMusicList;
+            MediaController.getInstance().getPlaylist().clear();
+            MediaController.getInstance().getPlaylist().addAll(savedMusicList.list);
+            if (!sameList) MediaController.getInstance().playMessage(savedMusicList.list.get(0));
+            showDialog(new AudioPlayerAlert(getContext(), getResourceProvider()));
+        }
     }
 
     private void onWriteButtonClick() {
@@ -9188,9 +9224,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (isInLandscapeMode && actionsView != null) {
             actionsView.drawingBlur(false);
         }
-        if (isInLandscapeMode && musicView != null) {
-            musicView.drawingBlur(false);
-        }
+        //if (isInLandscapeMode && musicView != null) {
+        //    musicView.drawingBlur(false);
+        //}
         if (isInLandscapeMode && isPulledDown) {
             final View view = layoutManager.findViewByPosition(0);
             if (view != null) {
@@ -9930,9 +9966,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (actionsView != null) {
                             actionsView.setParentExpanded(0);
                         }
-                        if (musicView != null) {
-                            musicView.setParentExpanded(0);
-                        }
+                        //if (musicView != null) {
+                        //    musicView.setParentExpanded(0);
+                        //}
                     }
                     openAnimationInProgress = false;
                     checkListViewScroll();
@@ -9973,9 +10009,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (actionsView != null) {
                 actionsView.setParentExpanded(progress);
             }
-            if (musicView != null) {
-                musicView.setParentExpanded(progress);
-            }
+            //if (musicView != null) {
+            //    musicView.setParentExpanded(progress);
+            //}
             if (ratingView != null) {
                 ratingView.setParentExpanded(progress);
             }
@@ -10731,6 +10767,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         botTonBalanceRow = -1;
         channelBalanceRow = -1;
         balanceDividerRow = -1;
+        musicRow = -1;
         hasMusic = false;
 
         unblockRow = -1;
@@ -10878,6 +10915,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         channelRow = rowCount++;
                         channelDividerRow = rowCount++;
                     }
+                }
+                if (hasMusic) {
+                    musicRow = rowCount++;
                 }
                 infoStartRow = rowCount;
                 if (!isBot && (hasPhone || !hasInfo)) {
@@ -13640,6 +13680,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     view = frameLayout;
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
+                case VIEW_TYPE_MUSIC: {
+                    ProfileMusicBlock block = new ProfileMusicBlock(mContext, resourcesProvider);
+                    block.setOnClickListener(v -> openSavedMusicPlayer());
+                    view = block;
+                    break;
+                }
             }
             if (viewType != VIEW_TYPE_SHARED_MEDIA) {
                 view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
@@ -14466,8 +14512,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     break;
                 case VIEW_TYPE_BOT_APP:
                     break;
-                case VIEW_TYPE_MUSIC:
+                case VIEW_TYPE_MUSIC: {
+                    ProfileMusicBlock block = (ProfileMusicBlock) holder.itemView;
+                    block.setMusicDocument(userInfo != null ? userInfo.saved_music : null);
                     break;
+                }
             }
         }
 
@@ -14583,7 +14632,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         position == clearLogsRow || position == switchBackendRow || position == setAvatarRow ||
                         position == addToGroupButtonRow || position == premiumRow || position == premiumGiftingRow ||
                         position == businessRow || position == liteModeRow || position == birthdayRow || position == channelRow ||
-                        position == starsRow || position == tonRow || position == linkedCommunityRow;
+                        position == starsRow || position == tonRow || position == linkedCommunityRow || position == musicRow;
             }
             if (holder.itemView instanceof UserCell) {
                 UserCell userCell = (UserCell) holder.itemView;
@@ -14656,6 +14705,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return VIEW_TYPE_BOTTOM_PADDING;
             } else if (position == sharedMediaRow) {
                 return VIEW_TYPE_SHARED_MEDIA;
+            } else if (position == musicRow) {
+                return VIEW_TYPE_MUSIC;
             } else if (position == versionRow) {
                 return VIEW_TYPE_VERSION;
             } else if (position == passwordSuggestionRow || position == phoneSuggestionRow || position == graceSuggestionRow) {
@@ -16044,6 +16095,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             put(++pointer, blockedUsersRow, sparseIntArray);
             put(++pointer, membersSectionRow, sparseIntArray);
             put(++pointer, channelBalanceSectionRow, sparseIntArray);
+            put(++pointer, musicRow, sparseIntArray);
             put(++pointer, sharedMediaRow, sparseIntArray);
             put(++pointer, unblockRow, sparseIntArray);
             put(++pointer, addToGroupButtonRow, sparseIntArray);
@@ -17357,6 +17409,118 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onParentScrollToTop() {
         listView.smoothScrollToPosition(0);
+    }
+
+    public static class ProfileMusicBlock extends FrameLayout {
+
+        private final BackupImageView artworkView;
+        private final SimpleTextView titleView;
+        private final SimpleTextView artistView;
+
+        private String currentKey;
+        private String currentTitle;
+        private String currentArtist;
+        private MusicArtworkLoader.Listener currentListener;
+
+        public ProfileMusicBlock(Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context);
+
+            final int bgColor     = Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider);
+            final int titleColor  = Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider);
+            final int subColor    = Theme.getColor(Theme.key_windowBackgroundWhiteGrayText, resourcesProvider);
+            final int placeholder = Theme.getColor(Theme.key_windowBackgroundGray, resourcesProvider);
+
+            setBackgroundColor(bgColor);
+            setPadding(dp(16), dp(10), dp(16), dp(10));
+
+            final LinearLayout row = new LinearLayout(context);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            addView(row, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.FILL));
+
+            final FrameLayout artWrapper = new FrameLayout(context);
+            artWrapper.setBackground(Theme.createRoundRectDrawable(dp(10), placeholder));
+            row.addView(artWrapper, LayoutHelper.createLinear(56, 56));
+
+            artworkView = new BackupImageView(context);
+            artworkView.setRoundRadius(dp(10));
+            artworkView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            artWrapper.addView(artworkView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+
+            final LinearLayout textColumn = new LinearLayout(context);
+            textColumn.setOrientation(LinearLayout.VERTICAL);
+            textColumn.setPadding(dp(12), 0, 0, 0);
+            row.addView(textColumn, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 1f));
+
+            titleView = new SimpleTextView(context);
+            titleView.setTextSize(15);
+            titleView.setTypeface(AndroidUtilities.bold());
+            titleView.setTextColor(titleColor);
+            titleView.setSingleLine();
+            titleView.setEllipsizeByGradient(true);
+            titleView.setScrollNonFitText(true);
+            textColumn.addView(titleView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+            artistView = new SimpleTextView(context);
+            artistView.setTextSize(13);
+            artistView.setTextColor(subColor);
+            artistView.setSingleLine();
+            artistView.setEllipsizeByGradient(true);
+            textColumn.addView(artistView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, dp(3), 0, 0));
+        }
+
+        public void setMusicDocument(TLRPC.Document document) {
+            if (document == null) {
+                setVisibility(GONE);
+                return;
+            }
+            setVisibility(VISIBLE);
+
+            String title = null, performer = null;
+            for (TLRPC.DocumentAttribute attr : document.attributes) {
+                if (attr instanceof TLRPC.TL_documentAttributeAudio) {
+                    TLRPC.TL_documentAttributeAudio audio = (TLRPC.TL_documentAttributeAudio) attr;
+                    if (!TextUtils.isEmpty(audio.title))     title = audio.title;
+                    if (!TextUtils.isEmpty(audio.performer)) performer = audio.performer;
+                }
+            }
+            if (title == null) title = FileLoader.getName(document);
+            final String fTitle  = title;
+            final String fArtist = performer == null ? "" : performer;
+
+            titleView.setText(fTitle);
+            artistView.setText(fArtist);
+
+            final String newKey = MusicArtworkCache.keyFor(fTitle, fArtist);
+            if (newKey.equals(currentKey)) return;
+
+            if (currentListener != null) {
+                MusicArtworkLoader.getInstance().cancel(currentTitle, currentArtist, currentListener);
+                currentListener = null;
+            }
+            currentKey    = newKey;
+            currentTitle  = fTitle;
+            currentArtist = fArtist;
+
+            artworkView.setImageDrawable(null);
+
+            currentListener = (t, a, path) -> {
+                if (!MusicArtworkCache.keyFor(t, a).equals(currentKey)) return;
+                if (path != null) {
+                    artworkView.setImage(ImageLocation.getForPath(path), null, (Drawable) null, null);
+                }
+            };
+            MusicArtworkLoader.getInstance().load(fTitle, fArtist, currentListener);
+        }
+
+        @Override
+        protected void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            if (currentListener != null) {
+                MusicArtworkLoader.getInstance().cancel(currentTitle, currentArtist, currentListener);
+                currentListener = null;
+            }
+        }
     }
 
     private final class TextView2 extends TextView implements Theme.Colorable {
