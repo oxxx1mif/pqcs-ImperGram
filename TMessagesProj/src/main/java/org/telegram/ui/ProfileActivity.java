@@ -17444,7 +17444,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             artworkView = new BackupImageView(context);
             artworkView.setRoundRadius(dp(10));
-            artworkView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            //artworkView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             artWrapper.addView(artworkView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             final LinearLayout textColumn = new LinearLayout(context);
@@ -17456,7 +17456,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             titleView.setTextSize(15);
             titleView.setTypeface(AndroidUtilities.bold());
             titleView.setTextColor(titleColor);
-            titleView.setSingleLine();
+            //titleView.setSingleLine();
             titleView.setEllipsizeByGradient(true);
             titleView.setScrollNonFitText(true);
             textColumn.addView(titleView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
@@ -17464,7 +17464,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             artistView = new SimpleTextView(context);
             artistView.setTextSize(13);
             artistView.setTextColor(subColor);
-            artistView.setSingleLine();
+            //artistView.setSingleLine();
             artistView.setEllipsizeByGradient(true);
             textColumn.addView(artistView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, dp(3), 0, 0));
         }
@@ -17484,7 +17484,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (!TextUtils.isEmpty(audio.performer)) performer = audio.performer;
                 }
             }
-            if (title == null) title = FileLoader.getName(document);
+            if (title == null) title = FileLoader.getDocumentFileName(document);
             final String fTitle  = title;
             final String fArtist = performer == null ? "" : performer;
 
