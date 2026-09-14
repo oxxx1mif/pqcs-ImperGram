@@ -8,7 +8,9 @@
 
 package org.telegram.ui;
 
+import static com.pqcs.impergram.ImperConfig.blurID;
 import static com.pqcs.impergram.ImperConfig.blurPhone;
+import static com.pqcs.impergram.ImperConfig.blurUsername;
 import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.AndroidUtilities.dpf2;
 import static org.telegram.messenger.AndroidUtilities.ilerp;
@@ -13866,10 +13868,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             }
                             value = LocaleController.getString(R.string.Username);
                             if (username != null) {
-                                text = "@" + username;
-                                if (usernameObj != null && !usernameObj.editable) {
-                                    text = new SpannableString(text);
-                                    ((SpannableString) text).setSpan(makeUsernameLinkSpan(usernameObj), 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                if (blurUsername) {
+                                    text = spoilerNumber;
+                                } else {
+                                    text = "@" + username;
+                                    if (usernameObj != null && !usernameObj.editable) {
+                                        text = new SpannableString(text);
+                                        ((SpannableString) text).setSpan(makeUsernameLinkSpan(usernameObj), 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    }
                                 }
                             } else {
                                 text = "—";
@@ -13883,7 +13889,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             }
                             if (ChatObject.isPublic(chat)) {
                                 containsQr = !myProfile;
-                                text = getMessagesController().linkPrefix + "/" + username + (topicId != 0 ? "/" + topicId : "");
+                                text = blurUsername
+                                        ? spoilerNumber
+                                        : getMessagesController().linkPrefix + "/" + username + (topicId != 0 ? "/" + topicId : "");
                                 value = LocaleController.getString(R.string.InviteLink);
                             } else {
                                 text = getMessagesController().linkPrefix + "/c/" + chatId + (topicId != 0 ? "/" + topicId : "");
@@ -13952,6 +13960,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             }
                             if (username == null || TextUtils.isEmpty(username)) {
                                 text = LocaleController.getString(R.string.UsernameEmpty);
+                            } else if (blurUsername) {
+                                text = spoilerNumber;
                             } else {
                                 text = "@" + username;
                             }
@@ -13959,7 +13969,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         } else {
                             username = UserObject.getPublicUsername(user);
                             if (user != null && !TextUtils.isEmpty(username)) {
-                                text = "@" + username;
+                                text = blurUsername ? spoilerNumber : "@" + username;
                             } else {
                                 text = LocaleController.getString(R.string.UsernameEmpty);
                             }
@@ -14538,10 +14548,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 for (int i = 0; i < alsoUsernames.size(); ++i) {
                     TLRPC.TL_username usernameObj = alsoUsernames.get(i);
                     final String usernameRaw = usernameObj.username;
-                    SpannableString username = new SpannableString("@" + usernameRaw);
-                    username.setSpan(makeUsernameLinkSpan(usernameObj), 0, username.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    username.setSpan(new ForegroundColorSpan(dontApplyPeerColor(getThemedColor(Theme.key_chat_messageLinkIn), false)), 0, username.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    usernames.append(username);
+                    if (blurUsername) {
+                        usernames.append(spoilerNumber);
+                    } else {
+                        SpannableString username = new SpannableString("@" + usernameRaw);
+                        username.setSpan(makeUsernameLinkSpan(usernameObj), 0, username.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        username.setSpan(new ForegroundColorSpan(dontApplyPeerColor(getThemedColor(Theme.key_chat_messageLinkIn), false)), 0, username.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        usernames.append(username);
+                    }
                     if (i < alsoUsernames.size() - 1) {
                         usernames.append(", ");
                     }
@@ -16150,11 +16164,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 var user = getMessagesController().getUser(userId);
                 if (user == null) return;
                 int dc = user.photo != null && user.photo.dc_id != 0 ? user.photo.dc_id : UserObject.isUserSelf(user) ? getConnectionsManager().getCurrentDatacenterId() : 0;
+                String idStr = blurID ? spoilerNumber : String.valueOf(id);
                 if (dc != 0) {
-                    idTextView.setText("ID: " + id + ", DC: " + dc, animated);
+                    idTextView.setText("ID: " + idStr + ", DC: " + dc, animated);
                     idTextView.setTag(R.id.id_dc, dc);
                 } else {
-                    idTextView.setText("ID: " + id, animated);
+                    idTextView.setText("ID: " + idStr, animated);
                 }
             } else if (chatId != 0) {
                 var chat = getMessagesController().getChat(chatId);
@@ -16169,11 +16184,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     id = chatId;
                 }
                 int dc = chatInfo != null ? chatInfo.stats_dc != 0 ? chatInfo.stats_dc : 0 : 0;
+                String idStr = blurID ? spoilerNumber : String.valueOf(id);
                 if (dc != 0) {
-                    idTextView.setText("ID: " + id + ", DC: " + dc, animated);
+                    idTextView.setText("ID: " + idStr + ", DC: " + dc, animated);
                     idTextView.setTag(R.id.id_dc, dc);
                 } else {
-                    idTextView.setText("ID: " + id, animated);
+                    idTextView.setText("ID: " + idStr, animated);
                 }
             } else {
                 id = 0;

@@ -22,6 +22,8 @@ import java.util.Set;
 public class ImperConfig {
     public static boolean customNoiseSuppressor = false;
     public static boolean blurPhone = false;
+    public static boolean blurID = false;
+    public static boolean blurUsername = false;
 
     private static final SharedPreferences preferences =
             ApplicationLoader.applicationContext.getSharedPreferences("imperconfig", Activity.MODE_PRIVATE);
@@ -38,6 +40,8 @@ public class ImperConfig {
         }
         customNoiseSuppressor = preferences.getBoolean("customNoiseSuppressor", false);
         blurPhone = preferences.getBoolean("blurPhone", false);
+        blurID = preferences.getBoolean("blurID", false);
+        blurUsername = preferences.getBoolean("blurUsername", false);
         configLoaded = true;
     }
 
@@ -51,6 +55,16 @@ public class ImperConfig {
         preferences.edit().putBoolean("blurPhone", blurPhone).apply();
     }
 
+    public static void toggleBlurID() {
+        blurID = !blurID;
+        preferences.edit().putBoolean("blurID", blurID).apply();
+    }
+
+    public static void toggleBlurUsername() {
+        blurUsername = !blurUsername;
+        preferences.edit().putBoolean("blurUsername", blurUsername).apply();
+    }
+
     public static String exportConfigs() {
         var object = new JsonObject();
         if (preferences.contains("customNoiseSuppressor")) {
@@ -58,6 +72,12 @@ public class ImperConfig {
         }
         if (preferences.contains("blurPhone")) {
             object.addProperty("blurPhone", preferences.getBoolean("blurPhone", false));
+        }
+        if (preferences.contains("blurID")) {
+            object.addProperty("blurID", preferences.getBoolean("blurID", false));
+        }
+        if (preferences.contains("blurUsername")) {
+            object.addProperty("blurUsername", preferences.getBoolean("blurUsername", false));
         }
         return object.toString();
     }
@@ -75,6 +95,12 @@ public class ImperConfig {
         }
         if (object.has("blurPhone")) {
             editor.putBoolean("blurPhone", object.get("blurPhone").getAsBoolean());
+        }
+        if (object.has("blurID")) {
+            editor.putBoolean("blurID", object.get("blurID").getAsBoolean());
+        }
+        if (object.has("blurUsername")) {
+            editor.putBoolean("blurUsername", object.get("blurUsername").getAsBoolean());
         }
         editor.apply();
         loadConfig(true);

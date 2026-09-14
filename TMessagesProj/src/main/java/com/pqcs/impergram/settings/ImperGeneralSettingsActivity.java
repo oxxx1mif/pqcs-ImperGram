@@ -24,14 +24,16 @@ import tw.nekomimi.nekogram.settings.BaseNekoSettingsActivity;
 
 public class ImperGeneralSettingsActivity extends BaseNekoSettingsActivity {
     private final int blurPhoneRow = rowId++;
+    private final int blurIdRow = rowId++;
+    private final int blurUsernameRow = rowId++;
 
     @Override
     protected void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
         items.add(UItem.asHeader(LocaleController.getString(R.string.General)));
 
-        items.add(UItem.asCheck(blurPhoneRow, LocaleController.getString(R.string.BlurPhone))
-                .slug("blurPhone")
-                .setChecked(ImperConfig.blurPhone));
+        items.add(UItem.asCheck(blurPhoneRow, LocaleController.getString(R.string.BlurPhone)).slug("blurPhone").setChecked(ImperConfig.blurPhone));
+        items.add(UItem.asCheck(blurIdRow, LocaleController.getString(R.string.BlurId)).slug("blurID").setChecked(ImperConfig.blurID));
+        items.add(UItem.asCheck(blurUsernameRow, LocaleController.getString(R.string.BlurUsername)).slug("blurUsername").setChecked(ImperConfig.blurUsername));
 
         items.add(UItem.asShadow(null));
     }
@@ -44,6 +46,18 @@ public class ImperGeneralSettingsActivity extends BaseNekoSettingsActivity {
             ImperConfig.toggleBlurPhone();
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ImperConfig.blurPhone);
+            }
+            showRestartBulletin();
+        } else if (id == blurIdRow) {
+            ImperConfig.toggleBlurID();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ImperConfig.blurID);
+            }
+            showRestartBulletin();
+        } else if (id == blurUsernameRow) {
+            ImperConfig.toggleBlurUsername();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ImperConfig.blurUsername);
             }
             showRestartBulletin();
         }

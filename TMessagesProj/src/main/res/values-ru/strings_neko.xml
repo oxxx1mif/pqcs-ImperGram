@@ -326,6 +326,8 @@
     <string name="ExperimentalSettings">Экспериментальные</string>
     <string name="NoiseCancellationSettings">Настройки шумоподавления</string>
     <string name="BlurPhone">Блюр телефонного номера</string>
+    <string name="BlurId">Блюр Id</string>
+    <string name="BlurUsername">Блюр Username</string>
 
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Настройки доступности</string>
